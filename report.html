@@ -21,16 +21,19 @@
             { id: "Подсказка 3", text: "Это явные признаки подделки сцены! В рапорте дверь заперта на электронный замок, а в дневнике (стр. 3) написан физический ключ. Серия флакона здесь XJ-909, хотя Алекс получил AL-442." }
         ];
         const container = document.getElementById('clueContainer');
-        clues.forEach(clue => {
-            const card = document.createElement('div');
-            card.className = 'clue-card';
-            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
-            card.addEventListener('click', function() {
-                const content = this.querySelector('.clue-content');
-                content.style.display = content.style.display === 'block' ? 'none' : 'block';
-            });
-            container.appendChild(card);
+    clues.forEach(clue => {
+        const card = document.createElement('div');
+        card.className = 'clue-card';
+        card.innerHTML = `
+            <div class="clue-header">${clue.id}</div>
+            <div class="clue-content">${clue.text}</div>
+        `;
+        card.addEventListener('click', function() {
+            const content = this.querySelector('.clue-content');
+            content.classList.toggle('open');
         });
+        container.appendChild(card);
+    });
     </script>
 </body>
 </html>
