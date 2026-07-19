@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сетевой лог климат-контроля</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>🌐 СЕТЕВОЙ ЛОГ КЛИМАТ-КОНТРОЛЯ</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">TOP SECRET</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Обратите внимание на MAC-адрес оборудования во всех трех сессиях и время их проведения." },
+            { id: "Подсказка 2", text: "Чей токен был использован для входа в систему, но чей реальный физический MAC-адрес зафиксировала система безопасности?" },
+            { id: "Подсказка 3", text: "Был использован токен Блэка, но MAC-адрес 00-1A-2B-3C-4D-A3 принадлежит Торну. Это доказывает, что Торн украл токен Блэка, чтобы подставить его, а сам управлял вентиляцией (20:00), выключил ее (03:50) и стер диск (04:05)." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

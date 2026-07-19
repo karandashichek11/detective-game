@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Медицинское заключение №-МЕД-901</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>🩺 МЕДИЦИНСКОЕ ЗАКЛЮЧЕНИЕ №-МЕД-901</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">CONFIDENTIAL</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Внимательно прочитайте раздел «Клиническая картина». На что именно жалуется пациент согласно этому документу?" },
+            { id: "Подсказка 2", text: "То, что врач назвал «бредом преследования» и «галлюцинациями», на самом деле было реальными наблюдениями Алекса. Какими именно?" },
+            { id: "Подсказка 3", text: "Алекс жаловался на «шум в голове» и «слежку через вентиляцию». Это не симптомы шизофрении, это реальные признаки действия нейротоксина «Изоляция», о чем Грей знала и использовала это для фальсификации диагноза." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

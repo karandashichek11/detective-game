@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Доступ к базе — ОПЕРАЦИЯ «ДЕТЕКТИВ»</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>БАЗА ДАННЫХ «ОПЕРАЦИЯ ДЕТЕКТИВ»</h1>
+        <p class="subtitle">Уровень доступа: <span class="redacted">НОЛЬ</span></p>
+        <p>Введите код доступа для продолжения:</p>
+        <input type="password" id="codeInput" placeholder="******" autofocus>
+        <button onclick="checkAccess()">ВВОД</button>
+        <p id="errorMsg" class="error"></p>
+        <div id="successMsg" style="display:none;">
+            <p>Доступ разрешён. Выберите файл дела:</p>
+            <ul class="file-list">
+                <li><a href="report.html">📄 1. Рапорт об обнаружении тела</a></li>
+                <li><a href="dossier-vance.html">📁 2. Досье: Виктор Вэнс</a></li>
+                <li><a href="dossier-grey.html">📁 3. Досье: Доктор Элен Грей</a></li>
+                <li><a href="dossier-thorne.html">📁 4. Досье: Маркус Торн</a></li>
+                <li><a href="dossier-black.html">📁 5. Досье: Кристиан Блэк</a></li>
+                <li><a href="dossier-nielsen.html">📁 6. Досье: Анна Нильсен</a></li>
+                <li><a href="medical-report.html">🩺 7. Медицинское заключение №-МЕД-901</a></li>
+                <li><a href="substance-report.html">🧪 8. Отчёт экспертизы вещества</a></li>
+                <li><a href="network-log.html">🌐 9-10. Сетевой лог климат-контроля</a></li>
+                <li><a href="diary-page1.html">📔 11. Дневник, Страница 1</a></li>
+                <li><a href="diary-page2.html">📔 12. Дневник, Страница 2</a></li>
+                <li><a href="diary-page3.html">📔 13. Дневник, Страница 3 (ПОДДЕЛКА)</a></li>
+                <li><a href="receipts.html">🧾 14. Личные квитанции</a></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        function checkAccess() {
+            const code = document.getElementById('codeInput').value;
+            if (code.trim() === '') {
+                document.getElementById('errorMsg').textContent = 'ОШИБКА: Код не может быть пустым';
+                document.getElementById('successMsg').style.display = 'none';
+            } else {
+                document.getElementById('errorMsg').textContent = '';
+                document.getElementById('successMsg').style.display = 'block';
+                document.getElementById('codeInput').style.display = 'none';
+                document.querySelector('button').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

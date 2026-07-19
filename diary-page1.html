@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Дневник, Страница 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>📔 ДНЕВНИК, СТРАНИЦА 1</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">ЛИЧНОЕ</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Алекс оставил прямые инструкции по поиску первой цифры кода и важную деталь о полученном флаконе." },
+            { id: "Подсказка 2", text: "Первая цифра кода связана со временем запуска вентиляции. Посмотрите в сетевой лог (стр. 9-10), во сколько началась Сессия №1." },
+            { id: "Подсказка 3", text: "Вентиляция запустилась в 20:00. Первая цифра часа в 24-часовом формате — это 2. Также запомните: настоящий флакон от Блэка имел серию AL-442." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

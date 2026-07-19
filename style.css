@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a0a;
+    color: #33ff33;
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: radial-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.scanline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    animation: scan 8s linear infinite;
+    pointer-events: none;
+    z-index: 999;
+}
+
+@keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.terminal {
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #33ff33;
+    padding: 30px;
+    max-width: 700px;
+    width: 90%;
+    box-shadow: 0 0 20px rgba(51, 255, 51, 0.3);
+    position: relative;
+    z-index: 1;
+    margin: 20px;
+}
+
+h1 {
+    font-size: 1.8em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px #33ff33;
+    border-bottom: 1px dashed #33ff33;
+    padding-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 0.9em;
+}
+
+.redacted {
+    background-color: #33ff33;
+    color: #33ff33;
+    padding: 2px 8px;
+    cursor: default;
+}
+
+input {
+    background: transparent;
+    border: 1px solid #33ff33;
+    color: #33ff33;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 1.2em;
+    width: 200px;
+    margin-right: 15px;
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+button {
+    background: #0a0a0a;
+    border: 1px solid #33ff33;
+    color: #33ff33;
+    padding: 10px 25px;
+    font-family: inherit;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+button:hover {
+    background: #33ff33;
+    color: #000;
+    box-shadow: 0 0 15px #33ff33;
+}
+
+.error {
+    color: #ff3333;
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+.file-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.file-list li {
+    margin: 10px 0;
+}
+
+.file-list a {
+    color: #33ff33;
+    text-decoration: none;
+    font-size: 1.1em;
+    border: 1px dashed #33ff33;
+    padding: 10px 20px;
+    display: block;
+    transition: 0.3s;
+    background: rgba(51, 255, 51, 0.05);
+}
+
+.file-list a:hover {
+    background: rgba(51, 255, 51, 0.2);
+    box-shadow: 0 0 15px #33ff33;
+    text-decoration: none;
+}
+
+/* Карточки подсказок */
+.clue-container {
+    margin-top: 30px;
+}
+
+.clue-card {
+    border: 1px solid #33ff33;
+    margin-bottom: 20px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.clue-card:hover {
+    background: rgba(51, 255, 51, 0.1);
+}
+
+.clue-header {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.clue-content {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px dashed #33ff33;
+    animation: reveal 0.5s steps(5) forwards;
+}
+
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 30px;
+    color: #33ff33;
+    text-decoration: underline;
+    font-size: 0.9em;
+}

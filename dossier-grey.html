@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Досье: Доктор Элен Грей</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>📁 ДОСЬЕ: ДОКТОР ЭЛЕН ГРЕЙ</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">TOP SECRET</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Обратите внимание на ее роль в программе «Изоляция» и активность ее рабочего терминала 12 июля." },
+            { id: "Подсказка 2", text: "Зачем главному психиатру внезапно понадобилась точная формула антидота и данные о его смертельной дозировке за полтора часа до атаки на Корду?" },
+            { id: "Подсказка 3", text: "Грей не просто выписала фальшивый диагноз. Ее запрос о смертельной дозировке 12 июля в 18:30 прямо указывает на то, что она готовила подмену антидота на яд." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

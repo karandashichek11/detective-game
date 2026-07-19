@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Дневник, Страница 3 (ПОДДЕЛКА)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>📔 ДНЕВНИК, СТРАНИЦА 3 (ПОДДЕЛКА)</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">ФАЛЬШИВКА</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Сравните дату и содержание этой записки с предыдущей страницей дневника и с официальным рапортом об обнаружении тела." },
+            { id: "Подсказка 2", text: "На Странице 2 написано «Последняя запись» и что он уходит на вокзал. Мог ли он написать это 13 июля в 02:30 в номере? А что в рапорте сказано про тип замка?" },
+            { id: "Подсказка 3", text: "Это грубая подделка! 1) Алекс назвал предыдущую запись «последней» и ушел. 2) В рапорте дверь заперта на электронный замок, а здесь написан физический ключ. 3) Если бы он выпил яд в 02:30, он бы умер за 3-5 минут, а не в 03:45-04:00." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Дневник, Страница 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>📔 ДНЕВНИК, СТРАНИЦА 2</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">ЛИЧНОЕ</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Используйте стих для поиска двух последних цифр. Посчитайте количество букв в нужных словах (знаки препинания не считаются)." },
+            { id: "Подсказка 2", text: "Строка 1, слово 3: «крадется» (8 букв). Строка 4, слово 4: «хитрый» (6 букв)." },
+            { id: "Подсказка 3", text: "Третья цифра кода — 8, четвертая — 6. Также обратите внимание на фразу «Последняя запись» и то, что он уходит на вокзал. Это ключ к разоблачению следующей страницы!" }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

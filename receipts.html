@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личные квитанции</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>🧾 ЛИЧНЫЕ КВИТАНЦИИ</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">ВЕЩДОК</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Сравните дату, время и данные на этих чеках с событиями из дневника и досье подозреваемых." },
+            { id: "Подсказка 2", text: "Чек из аптеки подтверждает серию препарата, который Алекс получил от Блэка. А чек из кафе подтверждает, где находился Алекс во время начала атаки." },
+            { id: "Подсказка 3", text: "Чек из аптеки подтверждает, что исходный флакон был AL-442 (значит, XJ-909 на месте преступления — подмена). Чек из кафе от 20:15 подтверждает, что во время начала атаки (20:00) Алекс был на вокзале Келети, а не в номере, что делает версию о его самоубийстве в 20:00 физически невозможной." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

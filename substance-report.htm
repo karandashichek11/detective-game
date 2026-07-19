@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчёт экспертизы вещества</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="terminal">
+        <div class="scanline"></div>
+        <h1>🧪 ОТЧЁТ ЭКСПЕРТИЗЫ ВЕЩЕСТВА</h1>
+        <p class="subtitle">Уровень секретности: <span class="redacted">TOP SECRET</span></p>
+        <p>Выберите подсказку для расшифровки:</p>
+        <div class="clue-container" id="clueContainer"></div>
+        <a href="index.html" class="back-link">← Вернуться в базу</a>
+    </div>
+    <script>
+        const clues = [
+            { id: "Подсказка 1", text: "Сравните серийный номер в этом отчете с номером, который Алекс записал в дневнике и в чеке из аптеки." },
+            { id: "Подсказка 2", text: "В отчете сказано, что смерть наступает за 3–5 минут. Если он выпил яд в 02:30 (как написано в записке на стр. 3), почему в рапорте время смерти указано как 03:45–04:00?" },
+            { id: "Подсказка 3", text: "Флакон подменили! Алекс получил AL-442, а на месте нашли XJ-909. Кроме того, если бы он выпил его в 02:30, он бы умер в 02:35. Он умер позже, значит, записка от 02:30 — это фальшивка, подброшенная убийцами." }
+        ];
+        const container = document.getElementById('clueContainer');
+        clues.forEach(clue => {
+            const card = document.createElement('div');
+            card.className = 'clue-card';
+            card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
+            card.addEventListener('click', function() {
+                const content = this.querySelector('.clue-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>
