@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Терминал взлома — СЕКРЕТНЫЙ УРОВЕНЬ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #33ff33;
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            flex-direction: column;
+        }
+
+        .terminal {
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #33ff33;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(51, 255, 51, 0.3);
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #33ff33;
+            border-bottom: 1px dashed #33ff33;
+            padding-bottom: 10px;
+            color: #33ff33;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            margin-bottom: 25px;
+            color: #33ff33;
+        }
+
+        .pass-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .pass-box {
+            width: 70px;
+            height: 70px;
+            border: 2px solid #33ff33;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #33ff33;
+            background: #0a0a0a;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            user-select: none;
+            text-shadow: 0 0 8px #33ff33;
+        }
+
+        .pass-box.correct {
+            background: #33ff33;
+            color: #000;
+            border-color: #33ff33;
+            text-shadow: none;
+            box-shadow: 0 0 12px #33ff33;
+        }
+
+        .pass-box.incorrect {
+            background: #ff3333;
+            color: #fff;
+            border-color: #ff3333;
+            text-shadow: none;
+            box-shadow: 0 0 12px #ff3333;
+        }
+
+        .pass-box.active {
+            border-color: #33ff33;
+            box-shadow: 0 0 0 3px rgba(51, 255, 51, 0.4);
+        }
+
+        .hint {
+            text-align: center;
+            color: #33ff33;
+            margin-bottom: 10px;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .pass-wrapper {
+            outline: none;
+            display: inline-block;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .pass-wrapper:focus {
+            box-shadow: 0 0 0 3px rgba(51, 255, 51, 0.5);
+        }
+
+        #successMessage {
+            text-align: left;
+            margin-top: 20px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #33ff33;
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 4px solid #33ff33;
+            padding: 15px 20px;
+            border-radius: 6px;
+            display: none;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            white-space: pre-line;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #33ff33;
+            text-decoration: underline;
+            font-size: 0.9em;
+        }
+
+        .scanline {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 300%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
+            animation: scan 0.5s linear infinite;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="terminal">
+        <h1>ВЗЛОМ АРХИВА КОРДЫ</h1>
+        <p class="subtitle">Уровень доступа: [ЗАБЛОКИРОВАН]</p>
+
+        <div class="hint">Введите 4-значный код разблокировки</div>
+        <div id="passField" class="pass-wrapper" tabindex="0">
+            <div class="pass-container">
+                <div class="pass-box" id="box0"></div>
+                <div class="pass-box" id="box1"></div>
+                <div class="pass-box" id="box2"></div>
+                <div class="pass-box" id="box3"></div>
+            </div>
+        </div>
+
+        <div id="successMessage">
+[КЛЮЧ АВТОРИЗАЦИИ ПРИНЯТ]
+[СИСТЕМА ДЕШИФРОВАНИЯ: АКТИВИРОВАНА]
+[СТАТУС: ДОСТУП РАЗРЕШЕН]
+ДОСЬЕ РАССЕКРЕЧЕНО.
+
+Удалённый сервер Лэнгли подтвердил подлинность вашего цифрового ключа. Физический протокол защиты заблокированного архива Алекса Корды успешно снят.
+
+ИНСТРУКЦИЯ ДЛЯ ОПЕРАТИВНОЙ ГРУППЫ:
+Возьмите из коробки запечатанный Конверт №3 с надписью «АРХИВ ЗАБЛОКИРОВАН» и вскройте его.
+Внутри находится полная расшифровка перехваченного аудиофайла. Изучите её, чтобы узнать истинные роли Директора Вэнса и Доктора Грей в ликвидации агента и официально завершить расследование.
+        </div>
+
+        <a href="index.html" class="back-link">← Вернуться в главную базу</a>
+    </div>
+
+    <script>
+        (function() {
+            const correct = [2, 5, 8, 6];  // Пароль 2586
+            let index = 0;
+            let locked = false;
+            const boxes = [
+                document.getElementById('box0'),
+                document.getElementById('box1'),
+                document.getElementById('box2'),
+                document.getElementById('box3')
+            ];
+            const wrapper = document.getElementById('passField');
+            const successMsg = document.getElementById('successMessage');
+
+            function setActiveBox(idx) {
+                boxes.forEach((box, i) => {
+                    if (i === idx) {
+                        box.classList.add('active');
+                    } else {
+                        box.classList.remove('active');
+                    }
+                });
+            }
+
+            setActiveBox(0);
+            wrapper.focus();
+
+            wrapper.addEventListener('click', () => wrapper.focus());
+
+            wrapper.addEventListener('focus', () => {
+                if (index < 4) setActiveBox(index);
+            });
+
+            wrapper.addEventListener('blur', () => {
+                boxes.forEach(box => box.classList.remove('active'));
+            });
+
+            function resetAll() {
+                boxes.forEach(box => {
+                    box.className = 'pass-box';
+                    box.textContent = '';
+                });
+                index = 0;
+                setActiveBox(0);
+                successMsg.style.display = 'none';
+            }
+
+            wrapper.addEventListener('keydown', function(e) {
+                if (e.key < '0' || e.key > '9') return;
+                e.preventDefault();
+
+                if (locked || index >= 4) return;
+
+                const digit = parseInt(e.key, 10);
+
+                if (digit === correct[index]) {
+                    boxes[index].textContent = digit;
+                    boxes[index].classList.add('correct');
+                    boxes[index].classList.remove('active');
+                    index++;
+                    if (index === 4) {
+                        successMsg.style.display = 'block';
+                        wrapper.blur();
+                    } else {
+                        setActiveBox(index);
+                    }
+                } else {
+                    locked = true;
+                    boxes[index].textContent = digit;
+                    boxes.forEach(box => box.className = 'pass-box incorrect');
+                    setTimeout(() => {
+                        resetAll();
+                        locked = false;
+                        wrapper.focus();
+                    }, 500);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
