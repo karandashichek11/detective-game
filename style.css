@@ -30,7 +30,7 @@ body {
         rgba(0, 0, 0, 0.1) 50%,
         rgba(0, 0, 0, 0) 100%
     );
-    animation: scan 0.1s linear infinite;
+    animation: scan 100s linear infinite;
     pointer-events: none;
     z-index: 999;
 }
