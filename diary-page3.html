@@ -27,7 +27,7 @@
             card.innerHTML = `<div class="clue-header">${clue.id}</div><div class="clue-content">${clue.text}</div>`;
             card.addEventListener('click', function() {
                 const content = this.querySelector('.clue-content');
-                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                content.classList.toggle('open');
             });
             container.appendChild(card);
         });
