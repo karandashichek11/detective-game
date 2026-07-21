@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Терминал взлома — СЕКРЕТНЫЙ УРОВЕНЬ</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
@@ -59,6 +60,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
         }
 
         .pass-box {
@@ -108,14 +110,16 @@
         }
 
         .pass-wrapper {
-            outline: none;
+            position: relative;
             display: inline-block;
-            border-radius: 12px;
-            padding: 4px;
         }
 
-        .pass-wrapper:focus {
-            box-shadow: 0 0 0 3px rgba(51, 255, 51, 0.5);
+        .hidden-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
         #successMessage {
@@ -174,13 +178,15 @@
         <p class="subtitle">Уровень доступа: [ЗАБЛОКИРОВАН]</p>
 
         <div class="hint">Введите 4-значный код разблокировки</div>
-        <div id="passField" class="pass-wrapper" tabindex="0">
+        <div id="passField" class="pass-wrapper" onclick="document.getElementById('hiddenInput').focus()">
             <div class="pass-container">
                 <div class="pass-box" id="box0"></div>
                 <div class="pass-box" id="box1"></div>
                 <div class="pass-box" id="box2"></div>
                 <div class="pass-box" id="box3"></div>
             </div>
+            <!-- Скрытое поле ввода для захвата клавиатуры на мобильных -->
+            <input type="text" id="hiddenInput" class="hidden-input" inputmode="numeric" maxlength="1" autocomplete="off" />
         </div>
 
         <div id="successMessage">
@@ -210,7 +216,7 @@
                 document.getElementById('box2'),
                 document.getElementById('box3')
             ];
-            const wrapper = document.getElementById('passField');
+            const hiddenInput = document.getElementById('hiddenInput');
             const successMsg = document.getElementById('successMessage');
 
             function setActiveBox(idx) {
@@ -223,31 +229,29 @@
                 });
             }
 
+            // Инициализация
             setActiveBox(0);
-            wrapper.focus();
+            // Автофокус на скрытое поле при загрузке (может не сработать на мобильных без жеста пользователя)
+            hiddenInput.focus();
 
-            wrapper.addEventListener('click', () => wrapper.focus());
-
-            wrapper.addEventListener('focus', () => {
+            // При клике на обертку фокус на скрытый input
+            document.getElementById('passField').addEventListener('click', function() {
+                hiddenInput.focus();
                 if (index < 4) setActiveBox(index);
             });
 
-            wrapper.addEventListener('blur', () => {
-                boxes.forEach(box => box.classList.remove('active'));
+            // Когда input получает фокус (например, после тапа на мобиле)
+            hiddenInput.addEventListener('focus', function() {
+                if (index < 4) setActiveBox(index);
             });
 
-            function resetAll() {
-                boxes.forEach(box => {
-                    box.className = 'pass-box';
-                    box.textContent = '';
-                });
-                index = 0;
-                setActiveBox(0);
-                successMsg.style.display = 'none';
-            }
-
-            wrapper.addEventListener('keydown', function(e) {
-                if (e.key < '0' || e.key > '9') return;
+            // Обработка ввода с клавиатуры (включая мобильную)
+            hiddenInput.addEventListener('keydown', function(e) {
+                if (e.key < '0' || e.key > '9') {
+                    // Если не цифра, разрешаем Backspace и т.д. - но в нашей логике не нужно
+                    e.preventDefault();
+                    return;
+                }
                 e.preventDefault();
 
                 if (locked || index >= 4) return;
@@ -261,7 +265,7 @@
                     index++;
                     if (index === 4) {
                         successMsg.style.display = 'block';
-                        wrapper.blur();
+                        hiddenInput.blur();
                     } else {
                         setActiveBox(index);
                     }
@@ -272,10 +276,30 @@
                     setTimeout(() => {
                         resetAll();
                         locked = false;
-                        wrapper.focus();
+                        hiddenInput.focus();
                     }, 500);
                 }
+
+                // Сброс значения скрытого поля, чтобы можно было вводить дальше
+                hiddenInput.value = '';
             });
+
+            // Предотвращаем вставку и другие события
+            hiddenInput.addEventListener('input', function() {
+                // Если что-то вставилось, очищаем
+                this.value = '';
+            });
+
+            function resetAll() {
+                boxes.forEach(box => {
+                    box.className = 'pass-box';
+                    box.textContent = '';
+                });
+                index = 0;
+                setActiveBox(0);
+                successMsg.style.display = 'none';
+                hiddenInput.value = '';
+            }
         })();
     </script>
 </body>
