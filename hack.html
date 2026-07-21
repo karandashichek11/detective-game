@@ -54,13 +54,18 @@
             color: #33ff33;
         }
 
+        .pass-wrapper {
+            position: relative;
+            margin: 0 auto;
+            width: fit-content;
+        }
+
         .pass-container {
             display: flex;
             gap: 12px;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
         }
 
         .pass-box {
@@ -107,11 +112,6 @@
             margin-bottom: 10px;
             font-size: 18px;
             letter-spacing: 1px;
-        }
-
-        .pass-wrapper {
-            position: relative;
-            display: inline-block;
         }
 
         .hidden-input {
@@ -185,7 +185,6 @@
                 <div class="pass-box" id="box2"></div>
                 <div class="pass-box" id="box3"></div>
             </div>
-            <!-- Скрытое поле ввода для захвата клавиатуры на мобильных -->
             <input type="text" id="hiddenInput" class="hidden-input" inputmode="numeric" maxlength="1" autocomplete="off" />
         </div>
 
@@ -207,7 +206,7 @@
 
     <script>
         (function() {
-            const correct = [2, 5, 8, 6];  // Пароль 2586
+            const correct = [2, 5, 8, 6];
             let index = 0;
             let locked = false;
             const boxes = [
@@ -229,26 +228,20 @@
                 });
             }
 
-            // Инициализация
             setActiveBox(0);
-            // Автофокус на скрытое поле при загрузке (может не сработать на мобильных без жеста пользователя)
             hiddenInput.focus();
 
-            // При клике на обертку фокус на скрытый input
             document.getElementById('passField').addEventListener('click', function() {
                 hiddenInput.focus();
                 if (index < 4) setActiveBox(index);
             });
 
-            // Когда input получает фокус (например, после тапа на мобиле)
             hiddenInput.addEventListener('focus', function() {
                 if (index < 4) setActiveBox(index);
             });
 
-            // Обработка ввода с клавиатуры (включая мобильную)
             hiddenInput.addEventListener('keydown', function(e) {
                 if (e.key < '0' || e.key > '9') {
-                    // Если не цифра, разрешаем Backspace и т.д. - но в нашей логике не нужно
                     e.preventDefault();
                     return;
                 }
@@ -279,14 +272,10 @@
                         hiddenInput.focus();
                     }, 500);
                 }
-
-                // Сброс значения скрытого поля, чтобы можно было вводить дальше
                 hiddenInput.value = '';
             });
 
-            // Предотвращаем вставку и другие события
             hiddenInput.addEventListener('input', function() {
-                // Если что-то вставилось, очищаем
                 this.value = '';
             });
 
