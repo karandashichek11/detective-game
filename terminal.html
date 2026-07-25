@@ -26,7 +26,7 @@
 
         .terminal-window {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background: #000;
             border: 1px solid #33ff33;
             box-shadow: 0 0 15px rgba(51, 255, 51, 0.2);
@@ -60,8 +60,7 @@
 
         #codeInput {
             background: transparent;
-            border: none;
-            border-bottom: 2px solid #33ff33;
+            border: 2px solid #33ff33;
             color: #33ff33;
             font-family: inherit;
             font-size: 1.4em;
@@ -70,12 +69,13 @@
             letter-spacing: 8px;
             outline: none;
             caret-color: #33ff33;
-            animation: blink-caret 1s step-end infinite;
+            padding: 5px;
+            animation: blinkBorder 1s step-end infinite;
         }
 
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: #33ff33; }
+        @keyframes blinkBorder {
+            0%, 100% { border-color: #33ff33; }
+            50% { border-color: transparent; }
         }
 
         .btn {
@@ -117,15 +117,26 @@
         .pdf-container {
             margin-top: 20px;
             width: 100%;
-            height: 600px;
+            height: 70vh;
             border: 1px solid #33ff33;
             display: none;
+            overflow: auto;
+            background: #111;
+            -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
         }
 
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            min-height: 600px;
+        }
+
+        .loading-text {
+            margin-top: 10px;
+            color: #33ff33;
+            font-size: 0.9em;
+            white-space: pre-line;
         }
     </style>
 </head>
@@ -150,6 +161,7 @@
         </div>
 
         <div id="responseBlock" class="response" style="display: none;"></div>
+        <div id="loadingBlock" class="loading-text" style="display: none;"></div>
         <div id="pdfBlock" class="pdf-container"></div>
     </div>
 
@@ -158,17 +170,29 @@
         const submitBtn = document.getElementById('submitBtn');
         const promptBlock = document.getElementById('promptBlock');
         const responseBlock = document.getElementById('responseBlock');
+        const loadingBlock = document.getElementById('loadingBlock');
         const pdfBlock = document.getElementById('pdfBlock');
 
-        // Правильные коды и соответствующие PDF
         const accessCodes = {
             '8830': {
                 message: 'ПРОВЕРКА... ДОСТУП РАЗРЕШЕН. УРОВЕНЬ 4 (CYBER OPS).\nЗАГРУЗКА ФАЙЛА #04-B...',
-                pdf: 'pdfs/hotel_scheme.pdf'   // путь к PDF схемы отеля
+                pdf: 'pdfs/hotel_scheme.pdf',
+                loadingSequence: [
+                    'ИНИЦИАЛИЗАЦИЯ ПРОТОКОЛА ПЕРЕДАЧИ...',
+                    'РАСШИФРОВКА ДАННЫХ...',
+                    'ПОСТРОЕНИЕ ВЕКТОРНОЙ СХЕМЫ...',
+                    'ГОТОВО.'
+                ]
             },
             '8829': {
                 message: 'ПРОВЕРКА... ДОСТУП РАЗРЕШЕН. УРОВЕНЬ 4 (ARCHIVE).\nЗАГРУЗКА ФАЙЛА #08-N...',
-                pdf: 'pdfs/newspaper.pdf'      // путь к PDF газеты
+                pdf: 'pdfs/newspaper.pdf',
+                loadingSequence: [
+                    'ЗАПРОС К АРХИВНОМУ СЕРВЕРУ...',
+                    'ПОИСК МИКРОФИЛЬМА...',
+                    'ОЦИФРОВКА ИЗОБРАЖЕНИЯ...',
+                    'ГОТОВО.'
+                ]
             }
         };
 
@@ -176,9 +200,9 @@
             responseBlock.style.display = 'block';
             responseBlock.className = 'response error';
             responseBlock.textContent = text;
+            loadingBlock.style.display = 'none';
             pdfBlock.style.display = 'none';
             pdfBlock.innerHTML = '';
-            // Очищаем поле и возвращаем фокус
             codeInput.value = '';
             codeInput.focus();
         }
@@ -189,13 +213,25 @@
             responseBlock.className = 'response success';
             responseBlock.textContent = data.message;
 
-            // Загрузка PDF через небольшую задержку для эффекта
-            setTimeout(() => {
-                pdfBlock.style.display = 'block';
-                pdfBlock.innerHTML = `<iframe src="${data.pdf}"></iframe>`;
-            }, 1000);
+            loadingBlock.style.display = 'block';
+            loadingBlock.textContent = '';
+            pdfBlock.style.display = 'none';
+            pdfBlock.innerHTML = '';
 
-            // Скрываем поле ввода
+            let i = 0;
+            const sequence = data.loadingSequence;
+            const interval = setInterval(() => {
+                if (i < sequence.length) {
+                    loadingBlock.textContent += (i > 0 ? '\n' : '') + sequence[i];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    loadingBlock.style.display = 'none';
+                    pdfBlock.style.display = 'block';
+                    pdfBlock.innerHTML = `<iframe src="${data.pdf}" allowfullscreen></iframe>`;
+                }
+            }, 800);
+
             promptBlock.style.display = 'none';
         }
 
@@ -220,7 +256,6 @@
             }
         });
 
-        // Автофокус при загрузке
         codeInput.focus();
     </script>
 </body>
