@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЦРУ — Терминал доступа</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #33ff33;
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .terminal-window {
+            width: 100%;
+            max-width: 800px;
+            background: #000;
+            border: 1px solid #33ff33;
+            box-shadow: 0 0 15px rgba(51, 255, 51, 0.2);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: left;
+            margin-bottom: 30px;
+            border-bottom: 1px dashed #33ff33;
+            padding-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .input-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-area label {
+            font-size: 1.1em;
+        }
+
+        #codeInput {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #33ff33;
+            color: #33ff33;
+            font-family: inherit;
+            font-size: 1.4em;
+            width: 120px;
+            text-align: center;
+            letter-spacing: 8px;
+            outline: none;
+            caret-color: #33ff33;
+            animation: blink-caret 1s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #33ff33; }
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            font-family: inherit;
+            font-size: 1.1em;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: #33ff33;
+            color: #000;
+        }
+
+        .response {
+            margin-top: 25px;
+            font-size: 1em;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .error {
+            color: #ff3333;
+            border-left: 3px solid #ff3333;
+            padding-left: 15px;
+        }
+
+        .success {
+            color: #33ff33;
+            border-left: 3px solid #33ff33;
+            padding-left: 15px;
+        }
+
+        .pdf-container {
+            margin-top: 20px;
+            width: 100%;
+            height: 600px;
+            border: 1px solid #33ff33;
+            display: none;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-window">
+        <div class="header">
+            <p>CENTRAL INTELLIGENCE AGENCY</p>
+            <p>SECURE DATABASE // MAINFRAME NODE 04</p>
+            <p>CONNECTION: ESTABLISHED (BUDAPEST PROXY)</p>
+        </div>
+
+        <div id="promptBlock">
+            <div class="input-area">
+                <label for="codeInput">УКАЖИТЕ ID-НОМЕР СОТРУДНИКА ИЛИ КОД ФАЙЛА ДЛЯ ДОСТУПА:</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>[</span>
+                    <input type="text" id="codeInput" maxlength="4" autocomplete="off" autofocus>
+                    <span>]</span>
+                </div>
+                <button class="btn" id="submitBtn">ПОДТВЕРДИТЬ</button>
+            </div>
+        </div>
+
+        <div id="responseBlock" class="response" style="display: none;"></div>
+        <div id="pdfBlock" class="pdf-container"></div>
+    </div>
+
+    <script>
+        const codeInput = document.getElementById('codeInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const promptBlock = document.getElementById('promptBlock');
+        const responseBlock = document.getElementById('responseBlock');
+        const pdfBlock = document.getElementById('pdfBlock');
+
+        // Правильные коды и соответствующие PDF
+        const accessCodes = {
+            '8830': {
+                message: 'ПРОВЕРКА... ДОСТУП РАЗРЕШЕН. УРОВЕНЬ 4 (CYBER OPS).\nЗАГРУЗКА ФАЙЛА #04-B...',
+                pdf: 'pdfs/hotel_scheme.pdf'   // путь к PDF схемы отеля
+            },
+            '8829': {
+                message: 'ПРОВЕРКА... ДОСТУП РАЗРЕШЕН. УРОВЕНЬ 4 (ARCHIVE).\nЗАГРУЗКА ФАЙЛА #08-N...',
+                pdf: 'pdfs/newspaper.pdf'      // путь к PDF газеты
+            }
+        };
+
+        function showError(text) {
+            responseBlock.style.display = 'block';
+            responseBlock.className = 'response error';
+            responseBlock.textContent = text;
+            pdfBlock.style.display = 'none';
+            pdfBlock.innerHTML = '';
+            // Очищаем поле и возвращаем фокус
+            codeInput.value = '';
+            codeInput.focus();
+        }
+
+        function showSuccess(code) {
+            const data = accessCodes[code];
+            responseBlock.style.display = 'block';
+            responseBlock.className = 'response success';
+            responseBlock.textContent = data.message;
+
+            // Загрузка PDF через небольшую задержку для эффекта
+            setTimeout(() => {
+                pdfBlock.style.display = 'block';
+                pdfBlock.innerHTML = `<iframe src="${data.pdf}"></iframe>`;
+            }, 1000);
+
+            // Скрываем поле ввода
+            promptBlock.style.display = 'none';
+        }
+
+        function handleSubmit() {
+            const code = codeInput.value.trim();
+            if (code === '') {
+                showError('ОШИБКА. ПУСТОЙ ВВОД. ПОВТОРИТЕ ПОПЫТКУ.');
+                return;
+            }
+
+            if (accessCodes.hasOwnProperty(code)) {
+                showSuccess(code);
+            } else {
+                showError('ОШИБКА. НЕДЕЙСТВИТЕЛЬНЫЙ КОД АВТОРИЗАЦИИ.\nИНЦИДЕНТ ЗАФИКСИРОВАН.');
+            }
+        }
+
+        submitBtn.addEventListener('click', handleSubmit);
+        codeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleSubmit();
+            }
+        });
+
+        // Автофокус при загрузке
+        codeInput.focus();
+    </script>
+</body>
+</html>
