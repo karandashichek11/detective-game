@@ -117,19 +117,15 @@
         .pdf-container {
             margin-top: 20px;
             width: 100%;
-            height: 70vh;
+            height: 500px;
             border: 1px solid #33ff33;
             display: none;
-            overflow: auto;
             background: #111;
-            -webkit-overflow-scrolling: touch;
         }
 
-        /* Встроенный просмотр PDF через embed */
-        embed {
+        iframe {
             width: 100%;
             height: 100%;
-            min-height: 600px;
             border: none;
         }
 
@@ -138,6 +134,19 @@
             color: #33ff33;
             font-size: 0.9em;
             white-space: pre-line;
+        }
+
+        .open-full {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            display: none; /* показывается вместе с pdf */
+        }
+
+        .open-full a {
+            color: #33ff33;
+            text-decoration: underline;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -164,6 +173,9 @@
         <div id="responseBlock" class="response" style="display: none;"></div>
         <div id="loadingBlock" class="loading-text" style="display: none;"></div>
         <div id="pdfBlock" class="pdf-container"></div>
+        <div id="openFullBlock" class="open-full">
+            <a id="openFullLink" href="#" target="_blank" rel="noopener">Открыть документ в полном размере</a>
+        </div>
     </div>
 
     <script>
@@ -173,6 +185,8 @@
         const responseBlock = document.getElementById('responseBlock');
         const loadingBlock = document.getElementById('loadingBlock');
         const pdfBlock = document.getElementById('pdfBlock');
+        const openFullBlock = document.getElementById('openFullBlock');
+        const openFullLink = document.getElementById('openFullLink');
 
         const accessCodes = {
             '8830': {
@@ -190,8 +204,8 @@
                 pdf: 'pdfs/newspaper.pdf',
                 loadingSequence: [
                     'ЗАПРОС К АРХИВУ ЦРУ...',
-                    'ПОЛУЧЕНИЕ ЦИФРОВОЙ КОПИИ ГАЗЕТЫ...',
-                    'ДЕШИФРОВКА ИЗОБРАЖЕНИЯ...',
+                    'ПОЛУЧЕНИЕ ЦИФРОВОЙ КОПИИ...',
+                    'ДЕШИФРОВКА ДАННЫХ...',
                     'ГОТОВО.'
                 ]
             }
@@ -203,6 +217,7 @@
             responseBlock.textContent = text;
             loadingBlock.style.display = 'none';
             pdfBlock.style.display = 'none';
+            openFullBlock.style.display = 'none';
             pdfBlock.innerHTML = '';
             codeInput.value = '';
             codeInput.focus();
@@ -217,6 +232,7 @@
             loadingBlock.style.display = 'block';
             loadingBlock.textContent = '';
             pdfBlock.style.display = 'none';
+            openFullBlock.style.display = 'none';
             pdfBlock.innerHTML = '';
 
             let i = 0;
@@ -229,8 +245,9 @@
                     clearInterval(interval);
                     loadingBlock.style.display = 'none';
                     pdfBlock.style.display = 'block';
-                    // Используем embed для лучшей поддержки многостраничных PDF на мобильных
-                    pdfBlock.innerHTML = `<embed src="${data.pdf}" type="application/pdf" />`;
+                    pdfBlock.innerHTML = `<iframe src="${data.pdf}"></iframe>`;
+                    openFullBlock.style.display = 'block';
+                    openFullLink.href = data.pdf;
                 }
             }, 800);
 
