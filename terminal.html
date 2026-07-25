@@ -122,14 +122,15 @@
             display: none;
             overflow: auto;
             background: #111;
-            -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
+            -webkit-overflow-scrolling: touch;
         }
 
-        iframe {
+        /* Встроенный просмотр PDF через embed */
+        embed {
             width: 100%;
             height: 100%;
-            border: none;
             min-height: 600px;
+            border: none;
         }
 
         .loading-text {
@@ -188,9 +189,9 @@
                 message: 'ПРОВЕРКА... ДОСТУП РАЗРЕШЕН. УРОВЕНЬ 4 (ARCHIVE).\nЗАГРУЗКА ФАЙЛА #08-N...',
                 pdf: 'pdfs/newspaper.pdf',
                 loadingSequence: [
-                    'ЗАПРОС К АРХИВНОМУ СЕРВЕРУ...',
-                    'ПОИСК МИКРОФИЛЬМА...',
-                    'ОЦИФРОВКА ИЗОБРАЖЕНИЯ...',
+                    'ЗАПРОС К АРХИВУ ЦРУ...',
+                    'ПОЛУЧЕНИЕ ЦИФРОВОЙ КОПИИ ГАЗЕТЫ...',
+                    'ДЕШИФРОВКА ИЗОБРАЖЕНИЯ...',
                     'ГОТОВО.'
                 ]
             }
@@ -228,7 +229,8 @@
                     clearInterval(interval);
                     loadingBlock.style.display = 'none';
                     pdfBlock.style.display = 'block';
-                    pdfBlock.innerHTML = `<iframe src="${data.pdf}" allowfullscreen></iframe>`;
+                    // Используем embed для лучшей поддержки многостраничных PDF на мобильных
+                    pdfBlock.innerHTML = `<embed src="${data.pdf}" type="application/pdf" />`;
                 }
             }, 800);
 
